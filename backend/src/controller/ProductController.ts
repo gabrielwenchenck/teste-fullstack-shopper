@@ -1,21 +1,17 @@
 import { Request, Response } from "express";
 import { BaseError } from "../errors/BaseError";
 import { ProductBusiness } from "../business/ProductBusiness";
-import { IProductInputDTO } from "../models/Product";
+import { IUpdateProductInputDTO } from "../models/Product";
 
 export class ProductController {
   constructor(private productBusiness: ProductBusiness) {}
 
   public getProducts = async (req: Request, res: Response) => {
-    const input: IProductInputDTO[] = [
-      {
-        product_code: 16,
-        new_price: 25.5,
-      },
-      { product_code: 18, new_price: 13 },
-    ];
+    const input: IUpdateProductInputDTO = {
+      products: req.body.products,
+    };
     try {
-      const response = await this.productBusiness.getProducts(input);
+      const response = await this.productBusiness.updateProduct(input);
       res.status(200).send(response);
     } catch (error) {
       console.log(error);

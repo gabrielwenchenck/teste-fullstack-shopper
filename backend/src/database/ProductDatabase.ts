@@ -17,26 +17,60 @@ export class ProductDatabase extends BaseDatabase {
     return productDB;
   };
 
-  public getProducts = async (product_code: number, new_price: number) => {
-    const result = await BaseDatabase.connection(
-      ProductDatabase.TABLE_PRODUCT
-    ).select("*");
-    // .where({
-    //   code: product_code,
-    // });
-    // .update({ sales_price: new_price });
+  // public getProducts = async (input: IProductInputDTO[]) => {
+  //   const productDB = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
+  //     .select("*")
+  //     .where({
+  //       code: product_code,
+  //     });
+  //   .update({ sales_price: new_price });
+
+  //   return result;
+  // };
+
+  // public getProducts = async (input: IProductInputDTO[]) => {
+
+  //   const productsDB: IProductDB[] = await BaseDatabase.connection(
+  //     ProductDatabase.TABLE_PRODUCT
+  //   )
+  //     .select()
+  //     .where({ code: product_code });
+
+  //   return productsDB;
+  // };
+
+  public editPrice = async (pr: Product) => {
+    const productDB: IProductDB = {
+      code: pr.getCode(),
+      name: pr.getName(),
+      cost_price: pr.getCostPrice(),
+      sales_price: pr.getSalesPrice(),
+    };
+
+    await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
+      .update(productDB)
+      .where({ code: productDB.code });
+    console.log(productDB);
+  };
+
+  public updatePrice = async (
+    newPrice: number,
+    productCode: number
+  ): Promise<void> => {
+    await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
+      .update({
+        sales_price: newPrice,
+      })
+      .where({ code: productCode });
+  };
+
+  public getProducts = async (product_code: number[]) => {
+    const result = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
+      .select("*")
+      .whereIn("code", product_code);
 
     return result;
   };
-
-  // public updateProducts = async (product_code: number, new_price: number): Promise<Void> => {
-  //   const result:IProductDB[] = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
-  //     .update({ sales_price: new_price })
-  //     .where({
-  //       code: product_code,
-  //     })
-
-  // };
 
   // public getIngredients = async (pizzaName: string): Promise<string[]> => {
   //   const result: IPizzasIngredientsDB[] = await BaseDatabase.connection(

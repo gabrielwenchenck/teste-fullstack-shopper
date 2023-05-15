@@ -41,7 +41,13 @@ export interface IGetProducts {
   products: Product[];
 }
 
-export interface IProductInputDTO {
-  product_code: number;
-  new_price: number;
+export interface IUpdateProductInputDTO {
+  products: {
+    product_code: number;
+    sales_price: number;
+  }[];
+}
+
+export interface IUpdateProductOutputDTO {
+  products: Product[];
 }
