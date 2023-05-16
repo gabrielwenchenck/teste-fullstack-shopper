@@ -50,6 +50,8 @@ code bigint PRIMARY KEY, # CODIGO DO PRODUTO
 
 ## Instruções
 
+Ps. utilizar a branch backend
+
 ### Frontend
 
 1. Clone o projeto
