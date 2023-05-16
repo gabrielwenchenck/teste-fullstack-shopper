@@ -44,21 +44,6 @@ export class ProductDatabase extends BaseDatabase {
     return result;
   };
 
-  // public getProductByCode = async (productCode: number) => {
-  //   const result = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
-  //     .join(
-  //       ProductDatabase.TABLE_PRODUCT,
-  //       `${ProductDatabase.TABLE_PRODUCT}.code`,
-  //       "=",
-  //       `${ProductDatabase.TABLE_PACK}.id`
-  //     )
-  //     .select(`${ProductDatabase.TABLE_PRODUCT}.*`) // Retorna todas as colunas do produto
-  //     .where(`${ProductDatabase.TABLE_PACK}.product_id`, "=", productCode)
-  //     .first();
-
-  //   return result;
-  // };
-
   public getPackByProductCode = async (productCode: number) => {
     const result = await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
       .join(
@@ -67,26 +52,12 @@ export class ProductDatabase extends BaseDatabase {
         "=",
         `${ProductDatabase.TABLE_PACK}.id`
       )
-      .select(`${ProductDatabase.TABLE_PRODUCT}.*`) // Retorna todas as colunas do produto
+      .select(`${ProductDatabase.TABLE_PRODUCT}.*`)
       .where(`${ProductDatabase.TABLE_PACK}.product_id`, "=", productCode)
       .first();
 
     return result;
   };
-
-  // public getComponentsByPackId = async (pack_id: number) => {
-  //   const result = await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
-  //     .join(
-  //       ProductDatabase.TABLE_PRODUCT,
-  //       `${ProductDatabase.TABLE_PRODUCT}.code`,
-  //       "=",
-  //       `${ProductDatabase.TABLE_PACK}.product_id`
-  //     )
-  //     .select(`${ProductDatabase.TABLE_PRODUCT}.*`) // Retorna todas as colunas do produto
-  //     .where(`${ProductDatabase.TABLE_PACK}.product_id`, "=", pack_id);
-
-  //   return result;
-  // };
 
   public getComponentsByPackId = async (pack_id: number) => {
     const result = await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
