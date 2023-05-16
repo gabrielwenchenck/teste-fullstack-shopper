@@ -1,67 +1,31 @@
-import { IPizzaDB, IPizzasIngredientsDB, Pizza } from "../models/Pizza";
-import { IProductDB, Product } from "../models/Product";
 import { BaseDatabase } from "./BaseDatabase";
 
 export class ProductDatabase extends BaseDatabase {
   public static TABLE_PRODUCT = "product";
   public static TABLE_PACK = "pack";
 
-  public toProductDBModel = (product: Product): IProductDB => {
-    const productDB: IProductDB = {
-      code: product.getCode(),
-      name: product.getName(),
-      cost_price: product.getCostPrice(),
-      sales_price: product.getSalesPrice(),
-    };
-
-    return productDB;
-  };
-
-  // public getProducts = async (input: IProductInputDTO[]) => {
-  //   const productDB = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
-  //     .select("*")
-  //     .where({
-  //       code: product_code,
-  //     });
-  //   .update({ sales_price: new_price });
-
-  //   return result;
-  // };
-
-  // public getProducts = async (input: IProductInputDTO[]) => {
-
-  //   const productsDB: IProductDB[] = await BaseDatabase.connection(
-  //     ProductDatabase.TABLE_PRODUCT
-  //   )
-  //     .select()
-  //     .where({ code: product_code });
-
-  //   return productsDB;
-  // };
-
-  public editPrice = async (pr: Product) => {
-    const productDB: IProductDB = {
-      code: pr.getCode(),
-      name: pr.getName(),
-      cost_price: pr.getCostPrice(),
-      sales_price: pr.getSalesPrice(),
-    };
-
-    await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
-      .update(productDB)
-      .where({ code: productDB.code });
-    console.log(productDB);
-  };
-
   public updatePrice = async (
     newPrice: number,
     productCode: number
   ): Promise<void> => {
+    console.log(newPrice, productCode);
     await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
       .update({
         sales_price: newPrice,
       })
       .where({ code: productCode });
+
+    await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
+      .join(
+        ProductDatabase.TABLE_PRODUCT,
+        `${ProductDatabase.TABLE_PACK}.product_id`,
+        "=",
+        `${ProductDatabase.TABLE_PRODUCT}.code`
+      )
+      .update({
+        sales_price: newPrice,
+      })
+      .where(`${ProductDatabase.TABLE_PACK}.pack_id`, "=", productCode);
   };
 
   public getProducts = async (product_code: number[]) => {
@@ -72,13 +36,69 @@ export class ProductDatabase extends BaseDatabase {
     return result;
   };
 
-  // public getIngredients = async (pizzaName: string): Promise<string[]> => {
-  //   const result: IPizzasIngredientsDB[] = await BaseDatabase.connection(
-  //     PizzaDatabase.TABLE_PIZZAS_INGREDIENTS
-  //   )
-  //     .select("ingredient_name")
-  //     .where({ pizza_name: pizzaName });
+  public getProductByCode = async (productCode: number) => {
+    const result = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
+      .where("code", "=", productCode)
+      .first();
 
-  //   return result.map((item) => item.ingredient_name);
+    return result;
+  };
+
+  // public getProductByCode = async (productCode: number) => {
+  //   const result = await BaseDatabase.connection(ProductDatabase.TABLE_PRODUCT)
+  //     .join(
+  //       ProductDatabase.TABLE_PRODUCT,
+  //       `${ProductDatabase.TABLE_PRODUCT}.code`,
+  //       "=",
+  //       `${ProductDatabase.TABLE_PACK}.id`
+  //     )
+  //     .select(`${ProductDatabase.TABLE_PRODUCT}.*`) // Retorna todas as colunas do produto
+  //     .where(`${ProductDatabase.TABLE_PACK}.product_id`, "=", productCode)
+  //     .first();
+
+  //   return result;
   // };
+
+  public getPackByProductCode = async (productCode: number) => {
+    const result = await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
+      .join(
+        ProductDatabase.TABLE_PRODUCT,
+        `${ProductDatabase.TABLE_PRODUCT}.code`,
+        "=",
+        `${ProductDatabase.TABLE_PACK}.id`
+      )
+      .select(`${ProductDatabase.TABLE_PRODUCT}.*`) // Retorna todas as colunas do produto
+      .where(`${ProductDatabase.TABLE_PACK}.product_id`, "=", productCode)
+      .first();
+
+    return result;
+  };
+
+  // public getComponentsByPackId = async (pack_id: number) => {
+  //   const result = await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
+  //     .join(
+  //       ProductDatabase.TABLE_PRODUCT,
+  //       `${ProductDatabase.TABLE_PRODUCT}.code`,
+  //       "=",
+  //       `${ProductDatabase.TABLE_PACK}.product_id`
+  //     )
+  //     .select(`${ProductDatabase.TABLE_PRODUCT}.*`) // Retorna todas as colunas do produto
+  //     .where(`${ProductDatabase.TABLE_PACK}.product_id`, "=", pack_id);
+
+  //   return result;
+  // };
+
+  public getComponentsByPackId = async (pack_id: number) => {
+    const result = await BaseDatabase.connection(ProductDatabase.TABLE_PACK)
+      .join(
+        ProductDatabase.TABLE_PRODUCT,
+        `${ProductDatabase.TABLE_PACK}.product_id`,
+        "=",
+        `${ProductDatabase.TABLE_PRODUCT}.code`
+      )
+      .select(`${ProductDatabase.TABLE_PRODUCT}.code AS product_id`)
+      .where(`${ProductDatabase.TABLE_PACK}.pack_id`, "=", pack_id);
+
+    return result;
+  };
 }

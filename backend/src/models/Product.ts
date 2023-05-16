@@ -44,10 +44,16 @@ export interface IGetProducts {
 export interface IUpdateProductInputDTO {
   products: {
     product_code: number;
-    sales_price: number;
+    new_price: number;
   }[];
 }
 
 export interface IUpdateProductOutputDTO {
-  products: Product[];
+  message: string;
+  products: {
+    code: number;
+    name: string;
+    current_price: number;
+    new_price: number;
+  }[];
 }
