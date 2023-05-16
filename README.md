@@ -106,7 +106,7 @@ BCRYPT_SALT_ROUNDS = 12
 
 ## Funcionalidades
 
-### PUT http://localhost:3000/product
+### PUT /product
 
 Este endpoint é responsável por atualizar os produtos com base no arquivo CSV e nas informações enviadas. O arquivo CSV deve ser carregado na página do frontend.
 
