@@ -1,0 +1,59 @@
+.App {
+  text-align: center;
+  margin-top: 100px;
+}
+
+.dropzone {
+  border: 2px dashed #ccc;
+  padding: 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+}
+
+.button {
+  background-color: #0dab77;
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
+  border: none;
+  border-radius: 4px;
+  margin-right: 10px;
+  cursor: pointer;
+}
+
+.message {
+  background-color: #f9f9f9;
+  padding: 10px;
+  margin-bottom: 20px;
+  font-size: 16px;
+}
+
+.response {
+  text-align: left;
+}
+
+.response-message {
+  font-weight: bold;
+  margin-bottom: 10px;
+  text-align: center;
+}
+
+.product-item {
+  list-style-type: none;
+  padding: 10px;
+  border: 1px solid #ccc;
+  margin-bottom: 10px;
+}
+.popup {
+  background-color: #f44336;
+  color: white;
+  padding: 10px;
+  margin-top: 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+}
+
+.popup-message {
+  margin: 0;
+  font-size: 16px;
+}
